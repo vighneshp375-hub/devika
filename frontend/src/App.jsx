@@ -9,8 +9,8 @@ import Card1 from './Card1';
 import Card2 from './Card2';
 import Login1 from './Login1';
 import Footer from './Footer';
-import form3 from './form3';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
 
 function App() {
 
@@ -22,14 +22,21 @@ const[image, setImage] = useState("");
 
 const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-const addComplaint=()=>{
+const addComplaint=async()=>{
   const newComplaint={
     department:department,
     description:description,
     image:image
   }
-  setComplaints([...complaints, newComplaint]);
-
+  await axios.post(
+    "http://localhost:3000/complaints",
+    newComplaint
+  )
+getComplaints()
+}
+const getComplaints=async()=>{
+  const response=await axios.get("http://localhost:3000/complaints")
+  setComplaints(response.data)
 }
 const deleteComplaint=(index)=>{
   const updatedComplaints=complaints.filter((item, i)=>i!==index);
@@ -56,8 +63,8 @@ const deleteComplaint=(index)=>{
         ))}
       
       </div>
-      <form3></form3>
-      <Login1></Login1>
+      
+      
       <Footer></Footer>
     </div>
     :
