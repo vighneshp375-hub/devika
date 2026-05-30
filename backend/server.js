@@ -20,6 +20,35 @@ mongoose.connect("mongodb+srv://vickyy:nandhu000@cluster0.xq2msem.mongodb.net/co
 
     const Complaint = mongoose.model('Complaint', complaintSchema);
 
+    const userSchema = new mongoose.Schema({
+        username: String,
+        password: String
+    });
+    const User = mongoose.model('User', userSchema);
+   
+    app.post('/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const foundUser = await User.findOne({ username: username, password: password });
+        if (foundUser) {
+            res.status(200).json({ message: "Login successful!" });
+        } else {
+            res.status(401).json({ message: "wrong username or password" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "error", error: error.message });
+    }
+
+});
+    app.post('/register', async (req, res) => {
+        try {
+            const newUser = new User(req.body);
+            await newUser.save();
+            res.status(201).json({ message: "User created successfully!" });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
     app.post('/complaints', async (req, res) => {
         try {
             const newComplaint = new Complaint(req.body);
@@ -51,3 +80,4 @@ mongoose.connect("mongodb+srv://vickyy:nandhu000@cluster0.xq2msem.mongodb.net/co
     app.listen(3000, () => {
         console.log("Server is running on port 3000");
     });
+    

@@ -21,7 +21,7 @@ const[description, setDescription] = useState("");
 const[image, setImage] = useState("");
 
 const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+ 
 useEffect(()=>{
   if (isLoggedIn){
   getComplaints();
